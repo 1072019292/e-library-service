@@ -36,6 +36,8 @@ jobs:
           node-version: '22'
       - name: Test frontend request behavior
         run: node --test src/test/frontend/api.test.mjs
+      - name: Test Pages gateway forwarding and error behavior
+        run: node --test cloud/pages-gateway/gateway.test.mjs
       - name: Preserve test reports
         if: always()
         uses: actions/upload-artifact@v4

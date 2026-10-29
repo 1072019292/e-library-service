@@ -1,0 +1,43 @@
+# Free review environment; the database expires 30 days after creation.
+# See docs/online-deployment.md before creating resources.
+services:
+  - type: web
+    name: lizhi-e-library-service
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /actuator/health/readiness
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: postgres,demo,render
+      - key: JAVA_TOOL_OPTIONS
+        value: -Xms64m -Xmx256m -XX:MaxMetaspaceSize=128m -XX:+ExitOnOutOfMemoryError
+      - key: PGHOST
+        fromDatabase:
+          name: lizhi-e-library-db
+          property: host
+      - key: PGDATABASE
+        fromDatabase:
+          name: lizhi-e-library-db
+          property: database
+      - key: PGUSER
+        fromDatabase:
+          name: lizhi-e-library-db
+          property: user
+      - key: PGPASSWORD
+        fromDatabase:
+          name: lizhi-e-library-db
+          property: password
+
+databases:
+  - name: lizhi-e-library-db
+    plan: free
+    region: singapore
+    databaseName: elibrary
+    user: elibrary
+    postgresMajorVersion: "16"
+    ipAllowList: []

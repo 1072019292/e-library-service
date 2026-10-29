@@ -190,6 +190,16 @@ The runtime container uses a non-root user. Only the application port is publish
 
 HTTP Basic is deliberately limited to this review-oriented API. Browser sign-in verifies credentials through the current-loans endpoint; it creates no cookie/session or password-management endpoint. Writes use JSON POST, PUT or DELETE with explicit authorization; form submissions cannot perform these operations and credentialed cross-origin access is not enabled. A real deployment needs TLS, managed credentials or an identity provider, authorization policy, monitoring and tested backup/restore procedures.
 
+## Online review hosting
+
+[render.yaml](render.yaml) provisions the Java container and a private PostgreSQL
+database for a free review environment. The optional [Cloudflare Pages gateway](cloud/pages-gateway)
+keeps the browser and API on one HTTPS entry, using the Java service for every
+operation. See [deployment instructions and limits](docs/online-deployment.md).
+The free web service can sleep, and its free database expires 30 days after
+creation. Online publication and direct Mainland China connectivity require
+separate live acceptance; configuration files alone do not establish either.
+
 ## Tests and CI
 
 ```powershell

@@ -11,3 +11,4 @@ application-local.*
 Thumbs.db
 /.impeccable/
 /src/main/resources/static/assets/covers/*.jpg
+**/.wrangler/

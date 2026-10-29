@@ -1,0 +1,13 @@
+# Explicit opt-in: postgres,demo,render. Never store review data on an
+# ephemeral container filesystem. Render supplies these database bindings.
+spring:
+  datasource:
+    url: jdbc:postgresql://${PGHOST}:5432/${PGDATABASE}?sslmode=require
+    username: ${PGUSER}
+    password: ${PGPASSWORD}
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+server:
+  address: 0.0.0.0
+  port: ${PORT:8080}
