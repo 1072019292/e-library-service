@@ -4,7 +4,7 @@ spring:
   profiles:
     default: demo
   datasource:
-    url: ${DB_URL:jdbc:h2:file:./data/elibrary;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=3000}
+    url: ${DB_URL:jdbc:h2:file:./data/elibrary;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=3000;WRITE_DELAY=0}
     username: ${DB_USERNAME:sa}
     password: ${DB_PASSWORD:}
     hikari:

@@ -39,6 +39,8 @@ It creates a file database at `./data/elibrary.mv.db`, 32 real technical titles 
 
 Passwords are stored as BCrypt hashes. These are deliberately published review credentials, not deployment secrets. Stop with Ctrl+C. Restart from the same working directory to retain loans. Flyway applies each migration once; restarting does not reset the catalog or loan history.
 
+The default file URL sets `WRITE_DELAY=0` to flush committed H2 records without its default 500ms delay. A subprocess regression test commits a record and halts the writer immediately; JAR-level acceptance also interrupts and restarts the application after saving a bookmark. This trades some local write throughput for clearer restart behavior. It is not a claim about hardware power-loss safety; see [H2 WRITE_DELAY](https://h2database.com/html/commands.html#set_write_delay).
+
 The catalog includes original Chinese introductions, audience notes, reading highlights and bibliographic links. See [catalog sources](docs/catalog-sources.md) and `catalog/books.json`. Work-level source records can aggregate editions, so exact editions, publication years, page counts and ratings are not asserted. Reading-license capacities are sample business assumptions. Demo migration V6 enriches the original books without replacing their IDs, capacities or loan history; it inserts the remaining titles only when absent.
 
 `python tools/generate_catalog.py` optionally checks that the versioned V6 seed matches the committed catalog and source records, entirely offline. This is a maintenance helper, not a startup requirement. After changing catalog data for a deployed database, generate a **new** migration using `--output <new-file>`; the helper refuses to overwrite an existing file.
