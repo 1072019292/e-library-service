@@ -77,6 +77,11 @@ expiration; export or migrate the review database before then if it is still
 needed. The free service filesystem is ephemeral, so H2 file mode is unsuitable
 for this deployment. No keep-alive scheduler is included.
 
+The current review database was created on October 29, 2026. Its Render console
+shows **November 28, 2026** as the expiration date. The review environment uses
+Free compute for both resources. The application source and local run path remain
+usable independently of that hosted database.
+
 The two demo accounts are intentionally public and share review state. Use no real
 personal or confidential data. This is a recruitment review environment, not a
 production service or a guarantee of access from every ISP.

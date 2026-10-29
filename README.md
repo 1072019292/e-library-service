@@ -12,7 +12,9 @@ See [design decisions and diagrams](docs/design.md) for the model, transaction s
 The interface is served by Cloudflare Pages; the API runs this Java application
 on Render with a separate PostgreSQL database. The free API can take 1–3 minutes
 to wake after inactivity. Use the public review accounts below. The free database
-expires 30 days after creation; see [hosting limits](docs/online-deployment.md).
+expires on **November 28, 2026** for this review instance; see
+[hosting limits](docs/online-deployment.md). Local builds remain available after
+the temporary hosted database expires.
 
 ## Quick start
 
