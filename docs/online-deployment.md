@@ -29,15 +29,19 @@ review accounts and catalog in this dedicated database.
    `/actuator/health/readiness`; it includes a database connectivity check.
 5. Record the actual service URL and database expiration shown by Render.
 
-Automatic subsequent application deployments wait for GitHub checks to pass.
+The Blueprint configures subsequent automatic application deployments to wait for
+GitHub checks. Automatic repository notifications require a Git provider
+connection in Render; a deployment created from the public repository URL can be
+updated with the Blueprint's **Manual sync** action without granting access to
+other repositories.
 Render builds the existing multi-stage Dockerfile remotely; local Docker is not
 required. Do not place secrets in a Dockerfile, build argument or public URL.
 
 ## Connect the Pages entry
 
 Set `JAVA_ORIGIN` in `cloud/pages-gateway/wrangler.jsonc` to the actual HTTPS
-`onrender.com` service origin, with no path, query, credentials or port. The blank
-default deliberately fails closed. Then, from `cloud/pages-gateway`, use the
+`onrender.com` service origin, with no path, query, credentials or port. An unset
+or unsafe origin deliberately fails closed. Then, from `cloud/pages-gateway`, use the
 account's authenticated Wrangler installation:
 
 ```text
