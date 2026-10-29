@@ -12,3 +12,4 @@ Thumbs.db
 /.impeccable/
 /src/main/resources/static/assets/covers/*.jpg
 **/.wrangler/
+/cloud/pages-gateway/dist/

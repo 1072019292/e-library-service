@@ -1,6 +1,6 @@
 {
   "name": "lizhi-e-library",
-  "pages_build_output_dir": "./public",
+  "pages_build_output_dir": "./dist",
   "compatibility_date": "2026-05-15",
   "vars": {
     "JAVA_ORIGIN": "https://lizhi-e-library-service.onrender.com"

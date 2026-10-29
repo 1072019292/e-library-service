@@ -38,6 +38,8 @@ jobs:
         run: node --test src/test/frontend/api.test.mjs
       - name: Test Pages gateway forwarding and error behavior
         run: node --test cloud/pages-gateway/gateway.test.mjs
+      - name: Build the allowlisted Pages asset bundle
+        run: node cloud/pages-gateway/build.mjs
       - name: Preserve test reports
         if: always()
         uses: actions/upload-artifact@v4

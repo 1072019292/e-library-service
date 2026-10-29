@@ -15,7 +15,10 @@ const messages = new Map(Object.entries({
     LOAN_NOT_FOUND: '未找到这条借阅记录，请刷新后核对。',
     BOOK_BUSY: '这本书正在办理借还，请稍后再试。',
     INVALID_REQUEST: '请检查输入内容后再试。',
-    CONNECTION_ERROR: '暂时无法连接书库，请确认服务已启动后重试。',
+    CONNECTION_ERROR: '暂时无法连接书库。首次访问免费演示站可能需要1–3分钟，请稍后重新加载。',
+    SERVICE_WARMING: '免费演示书库正在唤醒，可能需要1–3分钟。请稍后点击重新加载。',
+    UPSTREAM_UNAVAILABLE: '演示书库正在启动或暂时无法连接，请稍后重新加载。',
+    ORIGIN_NOT_CONFIGURED: '演示书库正在部署，请稍后重新加载。',
     INVALID_RESPONSE: '书库返回的数据暂时无法读取，请稍后重试。',
     INTERNAL_ERROR: '书库暂时遇到问题，请稍后再试。',
 }));
@@ -44,7 +47,8 @@ export async function request(path, { method = 'GET', authorization, body } = {}
     let data;
     try { data = await response.json(); }
     catch { throw new ApiError(response.status, 'INVALID_RESPONSE', !['GET', 'HEAD'].includes(method)); }
-    if (!response.ok) throw new ApiError(response.status, data.code || 'INTERNAL_ERROR');
+    if (!response.ok) throw new ApiError(response.status, data.code || 'INTERNAL_ERROR',
+      !['GET', 'HEAD'].includes(method) && (response.status >= 500 || response.status === 408));
     return data;
   } catch (error) {
     if (error instanceof ApiError) throw error;

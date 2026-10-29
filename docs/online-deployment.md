@@ -1,14 +1,16 @@
 # Online review deployment
 
 The Java application remains the sole owner of authentication, catalog queries,
-loans, bookmarks, transactions and database migrations. Cloudflare Pages forwards
-requests to that application; it does not replace the backend with browser data.
+loans, bookmarks, transactions and database migrations. Cloudflare Pages serves
+the same HTML/assets included in the JAR and forwards API requests to the Java
+application; it does not replace the backend with browser data.
 
 ## Layout
 
 ```text
-Browser -> HTTPS Cloudflare Pages gateway -> HTTPS Render Java service
-                                              -> private Render PostgreSQL
+Browser -> HTTPS Cloudflare Pages HTML/assets
+                 -> API gateway -> HTTPS Render Java service
+                                        -> private Render PostgreSQL
 ```
 
 `render.yaml` defines a free Docker web service and a separate free PostgreSQL 16
@@ -41,16 +43,18 @@ required. Do not place secrets in a Dockerfile, build argument or public URL.
 
 Set `JAVA_ORIGIN` in `cloud/pages-gateway/wrangler.jsonc` to the actual HTTPS
 `onrender.com` service origin, with no path, query, credentials or port. An unset
-or unsafe origin deliberately fails closed. Then, from `cloud/pages-gateway`, use the
-account's authenticated Wrangler installation:
+or unsafe origin deliberately fails closed. Build the asset bundle using an
+explicit allowlist, which excludes local scans and runtime data. From
+`cloud/pages-gateway`, use Node.js and the account's authenticated Wrangler:
 
 ```text
+node build.mjs
 wrangler pages project create lizhi-e-library --production-branch main
-wrangler pages deploy ./public --project-name lizhi-e-library --branch main
+wrangler pages deploy ./dist --project-name lizhi-e-library --branch main
 ```
 
 Create the Pages project once. Reuse it on updates. Preserve the deployment ID and
-returned URL rather than guessing a live address. The gateway forwards each
+returned URL rather than guessing a live address. The gateway forwards each API
 request once, including explicit authentication and JSON writes, to one configured
 service. It preserves application security headers and error responses, does not
 cache private data, and keeps application redirects on the Pages entry. It never
@@ -65,7 +69,9 @@ node --test cloud/pages-gateway/gateway.test.mjs
 ## Review limits and acceptance
 
 Render's free web service sleeps after 15 minutes without requests. Waking it can
-take approximately a minute. The free PostgreSQL database expires **30 days after
+take a minute or longer; the first observed Java startup took several minutes on
+the free instance. The interface loads from Pages independently and explains
+temporary API failures, without resending uncertain writes. The free PostgreSQL database expires **30 days after
 creation**, and Render does not offer free database backups. Record the actual
 expiration; export or migrate the review database before then if it is still
 needed. The free service filesystem is ephemeral, so H2 file mode is unsuitable

@@ -9,7 +9,7 @@ test('the Workers entrypoint does not mistake ExecutionContext for fetch', async
     assert.equal(new URL(request.url).hostname, 'library-test.onrender.com');
     return new Response('runtime entry works');
   });
-  const response = await gateway.fetch(new Request('https://library.pages.dev/'), env,
+  const response = await gateway.fetch(new Request('https://library.pages.dev/api/books'), env,
     { waitUntil() {} });
   assert.equal(await response.text(), 'runtime entry works');
 });
@@ -83,4 +83,23 @@ test('upstream business conflicts are returned without replacement or retry', as
   assert.equal(response.status, 409);
   assert.equal((await response.json()).code, 'NO_LICENSE_AVAILABLE');
   assert.equal(response.headers.get('Cache-Control'), 'no-store');
+});
+
+test('the page loads from edge assets even when the Java service is asleep', async t => {
+  t.mock.method(globalThis, 'fetch', () => assert.fail('static requests must not contact Java'));
+  const response = await gateway.fetch(new Request('https://library.pages.dev/'), {
+    ...env, ASSETS: { fetch: async () => new Response('<html>Library interface</html>') },
+  });
+  assert.equal(await response.text(), '<html>Library interface</html>');
+  assert.match(response.headers.get('Content-Security-Policy'), /frame-ancestors 'none'/);
+  assert.equal(response.headers.get('X-Library-Gateway'), 'pages-assets');
+});
+
+test('a hosting wake-up HTML page is reported as a temporary API failure', async () => {
+  const response = await forwardRequest(new Request('https://library.pages.dev/api/books'), env,
+    async () => new Response('<html>Starting service</html>', {
+      headers: { 'Content-Type': 'text/html' },
+    }));
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).code, 'SERVICE_WARMING');
 });

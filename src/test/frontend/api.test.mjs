@@ -71,3 +71,24 @@ test('removing a saved book accepts a confirmed empty 204 response', async t => 
   t.mock.method(globalThis, 'fetch', async () => ({ ok: true, status: 204, json: async () => { throw new Error('must not parse'); } }));
   assert.equal(await request('/api/me/favorites/2', { method: 'DELETE', authorization: 'Basic demo' }), null);
 });
+
+test('gateway failure after a write is ambiguous and is not automatically repeated', async t => {
+  let attempts = 0;
+  t.mock.method(globalThis, 'fetch', async () => {
+    attempts++;
+    return { ok: false, status: 503, json: async () => ({ code: 'UPSTREAM_UNAVAILABLE' }) };
+  });
+  await assert.rejects(request('/api/loans', { method: 'POST', body: { bookId: 2 } }), error => {
+    assert.equal(error.ambiguous, true); assert.equal(error.code, 'UPSTREAM_UNAVAILABLE'); return true;
+  });
+  assert.equal(attempts, 1);
+});
+
+test('a read during service wake-up explains the wait and offers a safe retry', async t => {
+  t.mock.method(globalThis, 'fetch', async () => ({
+    ok: false, status: 503, json: async () => ({ code: 'SERVICE_WARMING' }),
+  }));
+  await assert.rejects(request('/api/books'), error => {
+    assert.equal(error.ambiguous, false); assert.match(error.message, /正在唤醒/); return true;
+  });
+});

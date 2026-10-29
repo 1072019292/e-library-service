@@ -6,6 +6,14 @@ The implementation focuses on a complete lending workflow, explicit business rul
 
 See [design decisions and diagrams](docs/design.md) for the model, transaction sequence, alternatives and failure boundaries.
 
+[Open the online review](https://lizhi-e-library.pages.dev/) ·
+[GitHub Actions](https://github.com/1072019292/e-library-service/actions)
+
+The interface is served by Cloudflare Pages; the API runs this Java application
+on Render with a separate PostgreSQL database. The free API can take 1–3 minutes
+to wake after inactivity. Use the public review accounts below. The free database
+expires 30 days after creation; see [hosting limits](docs/online-deployment.md).
+
 ## Quick start
 
 Requirements: a JDK 17 installation, `JAVA_HOME`, and internet access for the first Maven dependency download. Neither a global Maven installation nor Docker is required for the default run.

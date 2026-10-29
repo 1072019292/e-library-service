@@ -62,6 +62,12 @@ export async function forwardRequest(request, env, send = fetch) {
       'The review service is starting or temporarily unreachable. Please try again shortly.');
   }
 
+  if (visitor.pathname.startsWith('/api/')
+      && (response.headers.get('Content-Type') || '').includes('text/html')) {
+    return problem(503, 'SERVICE_WARMING',
+      'The free review service is waking up. Please wait a few minutes and reload.');
+  }
+
   const resultHeaders = new Headers(response.headers);
   resultHeaders.set('Cache-Control', 'no-store');
   resultHeaders.set('X-Library-Gateway', 'pages');
@@ -83,6 +89,30 @@ export async function forwardRequest(request, env, send = fetch) {
   });
 }
 
-// The Workers runtime supplies ExecutionContext as its third argument; it is
-// not the injectable transport used by the tests above.
-export default { fetch: (request, env) => forwardRequest(request, env) };
+const contentPolicy = "default-src 'self'; script-src 'self'; style-src 'self'; "
+  + "img-src 'self' data: https://covers.openlibrary.org; font-src 'self'; "
+  + "connect-src 'self'; base-uri 'self'; form-action 'self'; "
+  + "frame-ancestors 'none'; object-src 'none'";
+
+export default {
+  async fetch(request, env) {
+    const { pathname } = new URL(request.url);
+    if (pathname === '/api' || pathname.startsWith('/api/')
+        || pathname === '/actuator' || pathname.startsWith('/actuator/')) {
+      // ExecutionContext is not the injectable test transport.
+      return forwardRequest(request, env);
+    }
+    // Readers can load the interface while the free Java instance wakes.
+    // Catalog and account state always come from the Java API.
+    const response = await env.ASSETS.fetch(request);
+    const result = new Response(response.body, response);
+    result.headers.set('Content-Security-Policy', contentPolicy);
+    result.headers.set('X-Content-Type-Options', 'nosniff');
+    result.headers.set('X-Frame-Options', 'DENY');
+    result.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+    result.headers.set('Cache-Control', pathname.startsWith('/assets/')
+      ? 'public, max-age=300' : 'no-store');
+    result.headers.set('X-Library-Gateway', 'pages-assets');
+    return result;
+  },
+};
