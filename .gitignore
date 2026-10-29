@@ -1,0 +1,11 @@
+/target/
+/data/
+/.idea/
+/.vscode/
+*.iml
+*.log
+.env
+.env.*
+application-local.*
+.DS_Store
+Thumbs.db

@@ -1,0 +1,262 @@
+openapi: 3.0.3
+info:
+  title: E-Library Service
+  version: 1.0.0
+  description: >-
+    Browse, borrow and return licensed digital books. Authentication identifies
+    the reader; clients cannot supply a user id. All timestamps are UTC.
+servers:
+  - url: http://127.0.0.1:8080
+tags:
+  - name: Catalog
+  - name: Lending
+  - name: Operations
+paths:
+  /api/books:
+    get:
+      operationId: browseBooks
+      tags: [Catalog]
+      summary: Browse books ordered by ascending id
+      parameters:
+        - name: q
+          in: query
+          description: Case-insensitive literal substring of title or author
+          schema: {type: string, maxLength: 200, default: ''}
+        - {$ref: '#/components/parameters/Page'}
+        - {$ref: '#/components/parameters/Size'}
+      responses:
+        '200':
+          description: Catalog page; availability is a snapshot
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/BookPage'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+  /api/books/{bookId}:
+    get:
+      operationId: getBook
+      tags: [Catalog]
+      summary: Get a book and current license availability
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema: {type: integer, format: int64, minimum: 1}
+      responses:
+        '200':
+          description: Book detail
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Book'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '404': {$ref: '#/components/responses/NotFound'}
+  /api/loans:
+    post:
+      operationId: borrowBook
+      tags: [Lending]
+      summary: Borrow an available license for the authenticated reader
+      security: [{basicAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [bookId]
+              properties:
+                bookId: {type: integer, format: int64, minimum: 1, example: 2}
+      responses:
+        '201':
+          description: A committed loan
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Loan'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '415':
+          description: Only application/json is accepted
+          content:
+            application/problem+json:
+              schema: {$ref: '#/components/schemas/Problem'}
+        '503': {$ref: '#/components/responses/Busy'}
+  /api/loans/{loanId}/return:
+    put:
+      operationId: returnLoan
+      tags: [Lending]
+      summary: Return an owned loan idempotently
+      description: >-
+        Repeated requests preserve the original returnedAt value. A missing loan
+        and a loan owned by another reader return the same 404 error.
+      security: [{basicAuth: []}]
+      parameters:
+        - name: loanId
+          in: path
+          required: true
+          schema: {type: integer, format: int64, minimum: 1}
+      responses:
+        '200':
+          description: Returned loan with a non-null returnedAt
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Loan'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '503': {$ref: '#/components/responses/Busy'}
+  /api/me/loans:
+    get:
+      operationId: getCurrentLoans
+      tags: [Lending]
+      summary: List the reader's active loans, newest first
+      description: Ordered by borrowedAt descending, then id descending. Excludes returned loans.
+      security: [{basicAuth: []}]
+      parameters:
+        - {$ref: '#/components/parameters/Page'}
+        - {$ref: '#/components/parameters/Size'}
+      responses:
+        '200':
+          description: Current loans only
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/LoanPage'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /actuator/health/liveness:
+    get:
+      operationId: liveness
+      tags: [Operations]
+      summary: Application liveness without internal details
+      responses:
+        '200': {$ref: '#/components/responses/Health'}
+        '503': {$ref: '#/components/responses/Health'}
+  /actuator/health/readiness:
+    get:
+      operationId: readiness
+      tags: [Operations]
+      summary: Readiness including database connectivity
+      responses:
+        '200': {$ref: '#/components/responses/Health'}
+        '503': {$ref: '#/components/responses/Health'}
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Public demo credentials are documented in README. Use TLS for any external deployment.
+  parameters:
+    Page:
+      name: page
+      in: query
+      schema: {type: integer, minimum: 0, default: 0}
+    Size:
+      name: size
+      in: query
+      schema: {type: integer, minimum: 1, maximum: 100, default: 20}
+  schemas:
+    Book:
+      type: object
+      required: [id, title, author, description, totalLicenses, availableLicenses]
+      properties:
+        id: {type: integer, format: int64}
+        title: {type: string}
+        author: {type: string}
+        description: {type: string}
+        totalLicenses: {type: integer, minimum: 1}
+        availableLicenses: {type: integer, minimum: 0}
+    BookReference:
+      type: object
+      required: [id, title, author]
+      properties:
+        id: {type: integer, format: int64}
+        title: {type: string}
+        author: {type: string}
+    Loan:
+      type: object
+      required: [id, book, borrowedAt, returnedAt]
+      properties:
+        id: {type: integer, format: int64}
+        book: {$ref: '#/components/schemas/BookReference'}
+        borrowedAt: {type: string, format: date-time}
+        returnedAt: {type: string, format: date-time, nullable: true}
+    Pagination:
+      type: object
+      required: [page, size, totalElements, totalPages]
+      properties:
+        page: {type: integer, minimum: 0}
+        size: {type: integer, minimum: 1, maximum: 100}
+        totalElements: {type: integer, format: int64, minimum: 0}
+        totalPages: {type: integer, minimum: 0}
+    BookPage:
+      allOf:
+        - {$ref: '#/components/schemas/Pagination'}
+        - type: object
+          required: [items]
+          properties:
+            items:
+              type: array
+              items: {$ref: '#/components/schemas/Book'}
+    LoanPage:
+      allOf:
+        - {$ref: '#/components/schemas/Pagination'}
+        - type: object
+          required: [items]
+          properties:
+            items:
+              type: array
+              items: {$ref: '#/components/schemas/Loan'}
+    Problem:
+      type: object
+      required: [type, title, status, detail, instance, code]
+      properties:
+        type: {type: string, format: uri}
+        title: {type: string}
+        status: {type: integer}
+        detail: {type: string}
+        instance: {type: string}
+        code: {type: string}
+        errors:
+          type: array
+          items: {type: string}
+  responses:
+    BadRequest:
+      description: Invalid parameters or JSON; code INVALID_REQUEST
+      content:
+        application/problem+json:
+          schema: {$ref: '#/components/schemas/Problem'}
+    Unauthorized:
+      description: Credentials are missing or invalid; code UNAUTHORIZED
+      headers:
+        WWW-Authenticate:
+          schema: {type: string, example: 'Basic realm="e-library"'}
+      content:
+        application/problem+json:
+          schema: {$ref: '#/components/schemas/Problem'}
+    NotFound:
+      description: Resource is missing or not owned by the reader
+      content:
+        application/problem+json:
+          schema: {$ref: '#/components/schemas/Problem'}
+    Conflict:
+      description: Code ALREADY_BORROWED or NO_LICENSE_AVAILABLE
+      content:
+        application/problem+json:
+          schema: {$ref: '#/components/schemas/Problem'}
+    Busy:
+      description: Database lock wait timed out; code BOOK_BUSY
+      headers:
+        Retry-After:
+          schema: {type: string, example: '1'}
+      content:
+        application/problem+json:
+          schema: {$ref: '#/components/schemas/Problem'}
+    Health:
+      description: Application state without component or connection details
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [status]
+            properties:
+              status: {type: string, example: UP}

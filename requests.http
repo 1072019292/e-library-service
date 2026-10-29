@@ -1,0 +1,37 @@
+@base = http://127.0.0.1:8080
+@alice = alice:alice-demo-pass
+@bob = bob:bob-demo-pass
+
+### Public catalog
+GET {{base}}/api/books?page=0&size=20
+
+### Search by title or author
+GET {{base}}/api/books?q=java
+
+### Book detail
+GET {{base}}/api/books/2
+
+### Borrow; copy the returned id into the return request below
+POST {{base}}/api/loans
+Authorization: Basic {{alice}}
+Content-Type: application/json
+
+{"bookId": 2}
+
+### Current loans
+GET {{base}}/api/me/loans
+Authorization: Basic {{alice}}
+
+### Bob cannot borrow while Alice holds the only license
+POST {{base}}/api/loans
+Authorization: Basic {{bob}}
+Content-Type: application/json
+
+{"bookId": 2}
+
+### Replace 1 with the actual returned loan id; repeat to verify idempotency
+PUT {{base}}/api/loans/1/return
+Authorization: Basic {{alice}}
+
+### Ready for traffic, including a database check
+GET {{base}}/actuator/health/readiness

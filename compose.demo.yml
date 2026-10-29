@@ -1,0 +1,5 @@
+# Explicit opt-in: disposable local review with the public demonstration accounts.
+services:
+  app:
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres,demo
