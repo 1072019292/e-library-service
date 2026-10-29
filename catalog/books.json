@@ -1,0 +1,450 @@
+[
+  {
+    "slug": "data-intensive",
+    "title": "Designing Data-Intensive Applications",
+    "author": "Martin Kleppmann",
+    "category": "数据库与系统",
+    "featured": true,
+    "description": "从数据模型、存储引擎到复制与分区，这本书把日常开发中零散的技术选择放回完整系统中。它关注的不只是某个数据库如何使用，更是可靠性、一致性与可维护性之间如何取舍。适合在掌握业务开发后，建立系统设计的整体视角。",
+    "audience": "有数据库使用经验，希望理解分布式数据系统的后端工程师。",
+    "highlights": [
+      "数据模型与存储引擎的取舍",
+      "复制、分区与事务一致性",
+      "批处理与流处理的设计思路"
+    ]
+  },
+  {
+    "slug": "effective-java",
+    "title": "Effective Java",
+    "author": "Joshua Bloch",
+    "category": "后端与 Java",
+    "featured": true,
+    "description": "围绕真实代码中的设计选择，讨论对象创建、类与接口、泛型、枚举、异常以及并发等主题。它将语言知识转化为可在代码评审中使用的判断标准，帮助读者理解一段 Java 代码为何容易维护，又可能隐藏哪些约束。",
+    "audience": "已经能够编写 Java 程序，希望提高 API 设计与代码质量的开发者。",
+    "highlights": [
+      "对象创建与资源生命周期",
+      "泛型、接口与方法契约",
+      "异常与并发代码的设计原则"
+    ]
+  },
+  {
+    "slug": "domain-driven-design",
+    "title": "Domain-Driven Design",
+    "author": "Eric Evans",
+    "category": "架构与工程",
+    "featured": false,
+    "description": "把软件建模与业务理解联系起来，讨论通用语言、实体、值对象、聚合和限界上下文。它提醒团队，模型的价值不在类图有多复杂，而在代码与业务沟通是否使用同一套概念，以及边界能否随着业务演进。",
+    "audience": "需要梳理复杂业务边界的工程师、架构师与技术负责人。",
+    "highlights": [
+      "以通用语言连接业务与代码",
+      "实体、值对象与聚合边界",
+      "限界上下文和模型的持续演进"
+    ]
+  },
+  {
+    "slug": "refactoring",
+    "title": "Refactoring",
+    "author": "Martin Fowler",
+    "category": "架构与工程",
+    "featured": false,
+    "description": "用一组可识别、可验证的小步骤改善既有代码，在保持外部行为的同时调整内部结构。它通过代码坏味道、重构手法和测试反馈，说明如何让日常修改更安全，也让设计改进成为持续开发的一部分。",
+    "audience": "经常维护既有业务代码，想提升修改安全性与可读性的开发者。",
+    "highlights": [
+      "识别代码坏味道",
+      "通过小步骤保持行为稳定",
+      "让测试支持持续的设计改进"
+    ]
+  },
+  {
+    "slug": "pragmatic-programmer",
+    "title": "The Pragmatic Programmer",
+    "author": "David Thomas and Andrew Hunt",
+    "category": "架构与工程",
+    "featured": false,
+    "description": "围绕开发者的日常判断，讨论知识积累、需求沟通、自动化、反馈和对代码的责任。内容跨越具体语言，强调在不确定环境中主动验证假设，把工程习惯与长期成长联系起来。",
+    "audience": "希望改进工作方式、沟通与工程判断的各阶段开发者。",
+    "highlights": [
+      "主动管理知识与反馈",
+      "把自动化融入日常开发",
+      "在需求与实现之间作出清晰判断"
+    ]
+  },
+  {
+    "slug": "clean-code",
+    "title": "Clean Code",
+    "author": "Robert C. Martin",
+    "category": "架构与工程",
+    "featured": false,
+    "description": "从命名、函数、对象、错误处理和测试出发，讨论代码如何准确表达意图。读者可以把其中的规则与自己的业务上下文对照，在评审中区分机械套用规范与真正降低理解成本的改进。",
+    "audience": "希望让业务代码更易读、更易评审的开发者。",
+    "highlights": [
+      "命名与函数的表达力",
+      "错误处理和边界设计",
+      "通过测试与重构改善可维护性"
+    ]
+  },
+  {
+    "slug": "clean-architecture",
+    "title": "Clean Architecture",
+    "author": "Robert C. Martin",
+    "category": "架构与工程",
+    "featured": false,
+    "description": "讨论系统中的职责、组件与依赖方向，关注业务规则如何与数据库、界面和框架保持合适的边界。它提供的是分析变化成本的视角，读者需要结合系统体量判断抽象是否值得。",
+    "audience": "开始承担模块设计与架构演进工作的工程师。",
+    "highlights": [
+      "组件职责和依赖方向",
+      "业务规则与外部机制的边界",
+      "从变化成本评估架构选择"
+    ]
+  },
+  {
+    "slug": "design-patterns",
+    "title": "Design Patterns",
+    "author": "Erich Gamma, Richard Helm, Ralph Johnson and John Vlissides",
+    "category": "架构与工程",
+    "featured": false,
+    "description": "以可复用的面向对象协作方式整理常见设计问题，覆盖创建、结构与行为模式。理解模式的动机与适用条件，比记住类图更重要：它们帮助团队讨论方案，也需要警惕为了模式而增加复杂度。",
+    "audience": "熟悉面向对象基础，希望建立设计讨论词汇的开发者。",
+    "highlights": [
+      "创建型、结构型与行为型协作",
+      "模式的动机、代价与适用条件",
+      "在具体上下文中选择抽象"
+    ]
+  },
+  {
+    "slug": "java-concurrency",
+    "title": "Java Concurrency in Practice",
+    "author": "Brian Goetz, Tim Peierls, Joshua Bloch, Joseph Bowbeer, David Holmes and Doug Lea",
+    "category": "后端与 Java",
+    "featured": true,
+    "description": "从线程安全、共享状态和对象发布讲起，逐步进入任务执行、取消、线程池与并发构建块。它将并发正确性与性能分开讨论，帮助读者在看到运行结果之前，先分析代码是否具有可靠的同步边界。",
+    "audience": "需要编写、评审或排查多线程 Java 代码的开发者。",
+    "highlights": [
+      "线程安全与安全发布",
+      "执行器、任务取消和线程池",
+      "正确性、活跃性与性能的区分"
+    ]
+  },
+  {
+    "slug": "java-performance",
+    "title": "Java Performance",
+    "author": "Scott Oaks",
+    "category": "后端与 Java",
+    "featured": false,
+    "description": "围绕 Java 应用的性能分析方法，讨论 JVM、垃圾回收、内存、线程与测量工具。书中的重要线索是先建立可靠的测量，再根据证据定位瓶颈，而不是从某个参数或经验结论直接推断优化效果。",
+    "audience": "希望系统学习 Java 性能测量与 JVM 调优的工程师。",
+    "highlights": [
+      "建立可比较的性能测量",
+      "理解垃圾回收与内存行为",
+      "从分析证据定位应用瓶颈"
+    ]
+  },
+  {
+    "slug": "spring-in-action",
+    "title": "Spring in Action",
+    "author": "Craig Walls",
+    "category": "后端与 Java",
+    "featured": false,
+    "description": "以应用开发为主线，把依赖注入、Web 接口、数据访问、安全与集成能力串成完整工作流。适合在学习 Spring 的同时建立组件如何协作的认识，并回到真实项目检验配置与边界。",
+    "audience": "掌握 Java 基础，准备构建 Spring 应用的开发者。",
+    "highlights": [
+      "依赖注入与应用配置",
+      "Web 接口和数据访问",
+      "安全与系统集成的实践路径"
+    ]
+  },
+  {
+    "slug": "spring-security",
+    "title": "Spring Security in Action",
+    "author": "Laurentiu Spilca",
+    "category": "后端与 Java",
+    "featured": false,
+    "description": "通过应用场景理解认证、授权与安全过滤链，逐步建立请求如何被验证和保护的认识。它适合与实际代码配合阅读，特别是区分登录成功、资源权限和客户端凭据处理这些不同层次的问题。",
+    "audience": "需要设计或维护 Spring 身份与权限功能的后端工程师。",
+    "highlights": [
+      "认证、授权与过滤链",
+      "密码存储与请求保护",
+      "在应用边界中理解安全配置"
+    ]
+  },
+  {
+    "slug": "release-it",
+    "title": "Release It!",
+    "author": "Michael T. Nygard",
+    "category": "架构与工程",
+    "featured": false,
+    "description": "把关注点从功能完成扩展到系统运行，讨论故障如何传播、容量如何耗尽，以及稳定性模式怎样限制影响范围。它帮助工程师在设计阶段就思考超时、隔离、恢复和运行可见性。",
+    "audience": "开始关注系统上线、稳定性与故障处理的工程师。",
+    "highlights": [
+      "识别常见稳定性风险",
+      "用超时与隔离限制故障传播",
+      "把运行视角带回设计过程"
+    ]
+  },
+  {
+    "slug": "building-microservices",
+    "title": "Building Microservices",
+    "author": "Sam Newman",
+    "category": "架构与工程",
+    "featured": true,
+    "description": "从服务边界出发，讨论独立部署、集成、数据一致性、测试与组织协作。它不仅介绍拆分方式，也帮助读者理解微服务带来的运行成本，判断何时保持模块化单体更合适。",
+    "audience": "需要评估服务拆分、跨服务协作与演进策略的团队。",
+    "highlights": [
+      "服务边界与独立部署",
+      "跨服务通信和数据一致性",
+      "技术选择与团队协作的关系"
+    ]
+  },
+  {
+    "slug": "monolith-microservices",
+    "title": "Monolith to Microservices",
+    "author": "Sam Newman",
+    "category": "架构与工程",
+    "featured": false,
+    "description": "围绕已有单体如何逐步演进，讨论拆分顺序、数据迁移、协作方式以及过程中的风险控制。书中关注连续交付和渐进变化，适合与当前系统的真实约束一起分析。",
+    "audience": "准备从既有系统中提取服务，而非从零设计架构的工程师。",
+    "highlights": [
+      "选择渐进拆分的切入点",
+      "处理数据库与服务边界迁移",
+      "在持续交付中控制演进风险"
+    ]
+  },
+  {
+    "slug": "fundamentals-architecture",
+    "title": "Fundamentals of Software Architecture",
+    "author": "Mark Richards and Neal Ford",
+    "category": "架构与工程",
+    "featured": false,
+    "description": "把架构特征、风格、组件与决策记录联系起来，强调架构选择本质上是在约束下进行取舍。内容适合用来组织讨论：先澄清目标和质量属性，再比较候选方案的成本。",
+    "audience": "希望从模块设计走向系统架构判断的开发者。",
+    "highlights": [
+      "识别和权衡架构特征",
+      "比较常见架构风格",
+      "记录决策与沟通取舍"
+    ]
+  },
+  {
+    "slug": "architecture-hard-parts",
+    "title": "Software Architecture: The Hard Parts",
+    "author": "Neal Ford, Mark Richards, Pramod Sadalage and Zhamak Dehghani",
+    "category": "架构与工程",
+    "featured": false,
+    "description": "聚焦分布式架构中难以独立优化的问题，例如服务粒度、数据所有权、事务和工作流。它鼓励读者把不同维度的影响摆在一起，说明某个方案为什么适用于当前场景。",
+    "audience": "面对服务与数据边界复杂取舍的架构师和资深工程师。",
+    "highlights": [
+      "服务粒度和耦合关系",
+      "分布式数据与事务取舍",
+      "用多维分析表达架构理由"
+    ]
+  },
+  {
+    "slug": "database-internals",
+    "title": "Database Internals",
+    "author": "Alex Petrov",
+    "category": "数据库与系统",
+    "featured": false,
+    "description": "从存储引擎进入数据库内部，讨论索引结构、日志、存储布局和分布式协作。它帮助读者把外部观察到的查询与持久化行为，连接到底层结构和实现机制。",
+    "audience": "希望深入理解数据库实现与存储原理的工程师。",
+    "highlights": [
+      "存储引擎与索引结构",
+      "日志、持久化与数据布局",
+      "分布式数据库的协作机制"
+    ]
+  },
+  {
+    "slug": "high-performance-mysql",
+    "title": "High Performance MySQL",
+    "author": "Baron Schwartz, Peter Zaitsev and Vadim Tkachenko",
+    "category": "数据库与系统",
+    "featured": false,
+    "description": "围绕 MySQL 的性能、索引、查询与运行维护展开，强调从负载与测量结果理解数据库行为。适合在真实 SQL、执行计划和业务访问模式之间来回对照。",
+    "audience": "需要分析 SQL、索引与数据库运行问题的后端开发者。",
+    "highlights": [
+      "分析查询与访问模式",
+      "设计索引并理解执行计划",
+      "建立数据库性能与运行视角"
+    ]
+  },
+  {
+    "slug": "redis-in-action",
+    "title": "Redis in Action",
+    "author": "Josiah L. Carlson",
+    "category": "数据库与系统",
+    "featured": false,
+    "description": "以应用问题讲解 Redis 的数据结构与使用方式，展示缓存、计数、排序和任务处理等建模思路。阅读时应同时考虑数据生命周期、并发边界以及缓存与主数据库之间的一致性。",
+    "audience": "已经接触 Redis，希望理解数据结构与业务建模关系的开发者。",
+    "highlights": [
+      "使用数据结构表达业务问题",
+      "缓存、计数与排序应用",
+      "数据生命周期与一致性边界"
+    ]
+  },
+  {
+    "slug": "ml-systems",
+    "title": "Designing Machine Learning Systems",
+    "author": "Chip Huyen",
+    "category": "AI 与机器学习",
+    "featured": false,
+    "description": "把模型开发放回数据、部署、监控与持续迭代的完整系统中，关注机器学习应用在真实环境中的变化。适合希望理解模型之外工程工作的读者。",
+    "audience": "连接模型开发与应用落地的工程师和技术负责人。",
+    "highlights": [
+      "数据与模型的系统关系",
+      "部署、监控和反馈循环",
+      "在变化的环境中维护模型应用"
+    ]
+  },
+  {
+    "slug": "ai-engineering",
+    "title": "AI Engineering",
+    "author": "Chip Huyen",
+    "category": "AI 与机器学习",
+    "featured": true,
+    "description": "围绕基础模型应用的构建过程，讨论评估、提示、检索、工具使用以及应用运行中的成本与延迟。它把模型调用视为系统的一部分，强调通过可验证的反馈改进应用。",
+    "audience": "准备构建或改进大模型应用的后端与 AI 应用工程师。",
+    "highlights": [
+      "以评估驱动应用改进",
+      "检索、提示与工具集成",
+      "权衡成本、延迟与输出质量"
+    ]
+  },
+  {
+    "slug": "hands-on-ml",
+    "title": "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow",
+    "author": "Aurélien Géron",
+    "category": "AI 与机器学习",
+    "featured": false,
+    "description": "通过可运行的实践连接机器学习概念、数据准备、模型训练与评估。内容从常见学习算法逐步进入神经网络，适合边做实验边建立基础。",
+    "audience": "具备 Python 基础，希望通过实践学习机器学习的读者。",
+    "highlights": [
+      "数据准备与模型评估",
+      "常见机器学习算法",
+      "神经网络的实践路径"
+    ]
+  },
+  {
+    "slug": "deep-learning",
+    "title": "Deep Learning",
+    "author": "Ian Goodfellow, Yoshua Bengio and Aaron Courville",
+    "category": "AI 与机器学习",
+    "featured": false,
+    "description": "从数学与机器学习基础进入深度网络，讨论优化、正则化、卷积、序列建模等核心概念。它适合作为系统学习和反复查阅的理论参考。",
+    "audience": "希望建立深度学习理论框架，并愿意补齐数学基础的读者。",
+    "highlights": [
+      "数学与机器学习基础",
+      "深度网络、优化与正则化",
+      "卷积与序列建模的核心思想"
+    ]
+  },
+  {
+    "slug": "nlp-transformers",
+    "title": "Natural Language Processing with Transformers",
+    "author": "Lewis Tunstall, Leandro von Werra and Thomas Wolf",
+    "category": "AI 与机器学习",
+    "featured": false,
+    "description": "围绕 Transformer 在自然语言任务中的应用，连接预训练模型、数据处理、微调和部署。通过具体任务理解模型工具链，适合把抽象概念转化为实验与应用。",
+    "audience": "希望实践自然语言模型与 Transformer 工具链的开发者。",
+    "highlights": [
+      "预训练模型与任务适配",
+      "文本数据处理和模型微调",
+      "从实验走向应用部署"
+    ]
+  },
+  {
+    "slug": "grokking-algorithms",
+    "title": "Grokking Algorithms",
+    "author": "Aditya Y. Bhargava",
+    "category": "编程与算法",
+    "featured": false,
+    "description": "以直观例子解释常见算法和数据结构，把复杂度、查找、排序、图和动态规划等概念联系起来。适合在写代码之前先建立清晰的解题模型。",
+    "audience": "希望重新建立算法直觉的初学者和应用开发者。",
+    "highlights": [
+      "理解算法复杂度",
+      "查找、排序与图算法",
+      "用分解问题建立解题思路"
+    ]
+  },
+  {
+    "slug": "introduction-algorithms",
+    "title": "Introduction to Algorithms",
+    "author": "Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest and Clifford Stein",
+    "category": "编程与算法",
+    "featured": false,
+    "description": "以严谨的分析方式组织算法设计与数据结构，覆盖基础算法、图、动态规划和复杂性相关主题。适合在已有编程经验后系统补足分析与证明能力。",
+    "audience": "希望系统学习算法设计与正确性分析的读者。",
+    "highlights": [
+      "算法设计和复杂度分析",
+      "基础数据结构与图算法",
+      "动态规划与正确性推理"
+    ]
+  },
+  {
+    "slug": "computer-networking",
+    "title": "Computer Networking: A Top-Down Approach",
+    "author": "James F. Kurose and Keith W. Ross",
+    "category": "网络与基础",
+    "featured": false,
+    "description": "从应用层向下理解网络，逐步连接 Web、传输、路由与链路等主题。它帮助应用开发者把请求超时、连接、吞吐等现象放回网络分层中分析。",
+    "audience": "希望建立网络系统整体认识的计算机学习者与开发者。",
+    "highlights": [
+      "从应用理解网络分层",
+      "传输与路由的核心机制",
+      "把网络现象与系统行为联系起来"
+    ]
+  },
+  {
+    "slug": "operating-systems",
+    "title": "Operating Systems: Three Easy Pieces",
+    "author": "Remzi H. Arpaci-Dusseau and Andrea C. Arpaci-Dusseau",
+    "category": "网络与基础",
+    "featured": false,
+    "description": "以虚拟化、并发和持久化三条主线组织操作系统知识，解释进程、内存、同步和存储如何支撑应用。适合把日常开发中的线程与文件操作连接到底层机制。",
+    "audience": "希望理解应用背后操作系统机制的学生与工程师。",
+    "highlights": [
+      "进程与内存虚拟化",
+      "并发与同步的基本机制",
+      "文件系统和持久化原理"
+    ]
+  },
+  {
+    "slug": "computer-systems",
+    "title": "Computer Systems: A Programmer's Perspective",
+    "author": "Randal E. Bryant and David R. O'Hallaron",
+    "category": "网络与基础",
+    "featured": false,
+    "description": "从程序员视角连接代码、机器执行、内存层次、链接、进程与网络。它关注程序如何真正运行，适合用来建立跨越语言与系统边界的基础。",
+    "audience": "希望从应用代码深入理解计算机系统的开发者。",
+    "highlights": [
+      "程序表示与机器执行",
+      "内存层次、链接和进程",
+      "从系统角度分析程序行为"
+    ]
+  },
+  {
+    "slug": "fluent-python",
+    "title": "Fluent Python",
+    "author": "Luciano Ramalho",
+    "category": "编程与算法",
+    "featured": true,
+    "description": "深入讨论 Python 的数据模型、协议、函数、类型与并发工具，帮助读者从语法使用走向语言惯用设计。适合已有经验后，重新理解对象之间如何协作。",
+    "audience": "已经使用 Python，希望提升表达力与设计质量的开发者。",
+    "highlights": [
+      "Python 数据模型与协议",
+      "函数、类型和对象设计",
+      "以语言惯用方式组织程序"
+    ]
+  },
+  {
+    "slug": "python-crash-course",
+    "title": "Python Crash Course",
+    "author": "Eric Matthes",
+    "category": "编程与算法",
+    "featured": false,
+    "description": "用基础语法和项目练习建立 Python 开发的起点，把变量、控制流、函数、类与测试串成可执行的学习过程。适合从小作品中获得反馈，再逐步扩展工具能力。",
+    "audience": "准备通过动手项目开始学习 Python 的读者。",
+    "highlights": [
+      "建立扎实的 Python 基础",
+      "通过项目连接知识点",
+      "用测试和反馈改进程序"
+    ]
+  }
+]

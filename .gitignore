@@ -9,3 +9,5 @@
 application-local.*
 .DS_Store
 Thumbs.db
+/.impeccable/
+/src/main/resources/static/assets/covers/*.jpg

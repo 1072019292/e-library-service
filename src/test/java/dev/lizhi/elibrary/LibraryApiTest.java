@@ -2,6 +2,7 @@ package dev.lizhi.elibrary;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
@@ -11,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import java.sql.Connection;
@@ -24,9 +26,20 @@ import org.springframework.test.web.servlet.MvcResult;
 
 class LibraryApiTest extends IntegrationSupport {
     @Test
-    void rootProvidesAPublicBrowserEntryToTheCatalog() throws Exception {
-        mvc.perform(get("/")).andExpect(status().isFound())
-                .andExpect(header().string("Location", "/api/books"));
+    void rootProvidesThePublicLibraryInterface() throws Exception {
+        mvc.perform(get("/")).andExpect(status().isOk()).andExpect(forwardedUrl("/index.html"));
+        mvc.perform(get("/index.html")).andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(content().string(containsString("/assets/app.js")))
+                .andExpect(header().string("Content-Security-Policy", containsString("script-src 'self'")));
+    }
+
+    @Test
+    void frontendAssetsArePublicWhilePersonalLoansRemainProtected() throws Exception {
+        for (String asset : new String[]{"app.css", "app.js", "api.mjs", "views.mjs", "icons.svg", "fonts/reading-serif.woff2"}) {
+            mvc.perform(get("/assets/" + asset)).andExpect(status().isOk());
+        }
+        mvc.perform(get("/api/me/loans")).andExpect(status().isUnauthorized());
     }
 
     @Test

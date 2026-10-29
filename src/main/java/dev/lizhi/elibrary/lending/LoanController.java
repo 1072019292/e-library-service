@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -39,8 +40,9 @@ public class LoanController {
 
     @GetMapping("/api/me/loans")
     public PageResponse<LoanView> current(@AuthenticationPrincipal LibraryPrincipal reader,
+            @RequestParam(defaultValue = "active") @Pattern(regexp = "active|returned") String status,
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "20") @Min(1) @Max(100) int size) {
-        return lending.current(reader.id(), page, size);
+        return status.equals("returned") ? lending.returned(reader.id(), page, size) : lending.current(reader.id(), page, size);
     }
 }

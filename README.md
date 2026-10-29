@@ -1,6 +1,6 @@
 # E-Library Service
 
-A Java 17 REST API for browsing, borrowing and returning digital books. The service models a limited number of concurrent reading licenses per title and keeps loan history after return.
+A Java 17 library application with a responsive Chinese browser interface and a REST API for browsing, borrowing and returning digital books. The service models a limited number of concurrent reading licenses per title and keeps loan history after return.
 
 The implementation focuses on a complete lending workflow, explicit business rules, database consistency and straightforward review. It is a single Spring Boot application with feature-oriented packages, not a distributed system.
 
@@ -24,9 +24,13 @@ On Linux or macOS:
 java -jar target/e-library-service-1.0.0.jar
 ```
 
-The default `demo` profile binds to `127.0.0.1:8080`. Open `http://127.0.0.1:8080/` in a browser to reach the public book catalog JSON. This root entry redirects to `/api/books`; the Java process must remain running. Start the application again after a computer restart.
+The default `demo` profile binds to `127.0.0.1:8080`. Open `http://127.0.0.1:8080/` for the library interface: search the catalog, open book details, sign in, borrow, view current loans and return books. The Java process must remain running. Start the application again after a computer restart.
 
-It creates a file database at `./data/elibrary.mv.db`, five books, and two **public demonstration accounts**:
+The HTML/CSS/JavaScript, font, licensed icons and original fallback cover compositions are included in the JAR. No Node.js runtime or separate frontend server is needed to use it. Optional publisher-cover images reference Open Library directly according to its usage guidance; failed or low-resolution scans retain the local fallback. All core tasks work without that image service. The interface supports desktop/mobile, system dark mode, keyboard focus and reduced motion. See `src/main/resources/static` and `DESIGN.md`.
+
+Browser credentials are held only in page memory, cleared on logout/refresh and sent through explicit Authorization headers with `credentials: omit`. A failed or timed-out write is not automatically repeated; the interface reconciles current loans and availability. Dynamic book and user text is inserted through DOM text nodes, and a Content Security Policy restricts assets and connections to the same origin.
+
+It creates a file database at `./data/elibrary.mv.db`, 32 real technical titles in six editorial categories, and two **public demonstration accounts**:
 
 | Username | Password |
 | --- | --- |
@@ -34,6 +38,10 @@ It creates a file database at `./data/elibrary.mv.db`, five books, and two **pub
 | `bob` | `bob-demo-pass` |
 
 Passwords are stored as BCrypt hashes. These are deliberately published review credentials, not deployment secrets. Stop with Ctrl+C. Restart from the same working directory to retain loans. Flyway applies each migration once; restarting does not reset the catalog or loan history.
+
+The catalog includes original Chinese introductions, audience notes, reading highlights and bibliographic links. See [catalog sources](docs/catalog-sources.md) and `catalog/books.json`. Work-level source records can aggregate editions, so exact editions, publication years, page counts and ratings are not asserted. Reading-license capacities are sample business assumptions. Demo migration V6 enriches the original books without replacing their IDs, capacities or loan history; it inserts the remaining titles only when absent.
+
+`python tools/generate_catalog.py` optionally checks that the versioned V6 seed matches the committed catalog and source records, entirely offline. This is a maintenance helper, not a startup requirement. After changing catalog data for a deployed database, generate a **new** migration using `--output <new-file>`; the helper refuses to overwrite an existing file.
 
 Check readiness:
 
@@ -87,8 +95,16 @@ The full contract, including schemas, authentication and errors, is in [docs/ope
 | POST | `/api/loans` | HTTP Basic | Create a loan from `{"bookId":2}`; `201` |
 | PUT | `/api/loans/{loanId}/return` | HTTP Basic | Return an owned loan; `200` |
 | GET | `/api/me/loans` | HTTP Basic | Paged current loans for the authenticated reader |
+| GET | `/api/books/categories` | Public | Real category facets and counts |
+| GET | `/api/me/loans?status=returned` | HTTP Basic | The reader's retained return history |
+| GET | `/api/me/library` | HTTP Basic | Current/returned/saved counts for the reader |
+| GET | `/api/me/favorites` | HTTP Basic | Paged saved books |
+| PUT | `/api/me/favorites/{bookId}` | HTTP Basic | Save idempotently; consumes no reading license |
+| DELETE | `/api/me/favorites/{bookId}` | HTTP Basic | Remove an owned bookmark idempotently; `204` |
 
 Pagination is zero-based, defaults to `page=0&size=20`, and accepts sizes 1–100. Catalog order is ascending book id. Current loans use descending borrowing time, then descending id. Search matches title or author case-insensitively; `%`, `_` and `!` are literal characters. An out-of-range page returns an empty `items` array.
+
+Catalog search also covers descriptions, categories, audience and highlights. Combine `category`, `availableOnly=true`, and `featuredOnly=true` as needed. `sort=catalog` preserves the default; `title` orders by case-insensitive title and `recent` uses descending catalog id. History uses return time then id descending. Saved books use save time then id descending. `status` defaults to `active`; only `active` and `returned` are accepted.
 
 Offsets greater than JPA's signed 32-bit limit are rejected with `400`, rather than overflowing into a server error.
 
@@ -123,6 +139,8 @@ Request bodies cannot select another user. Unknown properties, fractional book i
 ## Domain and consistency
 
 `Book` owns a fixed positive license capacity. `User` owns an identity and password hash. `Loan` references both and records borrowing and return times. Returning updates the loan; it does not delete it. There is no arbitrary per-reader total loan limit.
+
+`Favorite` is a separate reader/book relationship with a database unique constraint. Saving or removing it never borrows or returns a license. Writes take the same book lock before checking/updating, making retries and concurrent saves deterministic without introducing an inverse lock order. This deliberately reuses a small, proven protocol; very high bookmark volume would merit a less contended, database-specific upsert path.
 
 Every lending mutation follows one lock order inside a service transaction:
 
@@ -168,7 +186,7 @@ docker compose -f compose.yml -f compose.demo.yml up --build
 
 The runtime container uses a non-root user. Only the application port is published, bound to host loopback; PostgreSQL is internal to the Compose network. Database files use a named volume. The app waits for database health, supports graceful shutdown, and exposes liveness/readiness endpoints. Readiness includes a database check; health details remain hidden. Stop with `docker compose down`; it preserves database volumes.
 
-HTTP Basic is deliberately limited to this review-oriented API. It has no browser login, cookies, user registration or password-management endpoints. State-changing operations require a JSON POST or a PUT; form submissions are rejected and credentialed cross-origin access is not enabled. A real deployment needs TLS, managed credentials or an identity provider, authorization policy, operational monitoring and tested backup/restore procedures.
+HTTP Basic is deliberately limited to this review-oriented API. Browser sign-in verifies credentials through the current-loans endpoint; it creates no cookie/session or password-management endpoint. Writes use JSON POST, PUT or DELETE with explicit authorization; form submissions cannot perform these operations and credentialed cross-origin access is not enabled. A real deployment needs TLS, managed credentials or an identity provider, authorization policy, monitoring and tested backup/restore procedures.
 
 ## Tests and CI
 
@@ -178,18 +196,23 @@ HTTP Basic is deliberately limited to this review-oriented API. It has no browse
 
 # Run the same integration and concurrency suite on native PostgreSQL 16
 .\mvnw.cmd --batch-mode --no-transfer-progress -Ppostgres-test verify
+
+# Optional frontend request tests (Node.js 18+; Node is not an app runtime requirement)
+node --test src/test/frontend/api.test.mjs
 ```
 
 The PostgreSQL test profile starts a dedicated, loopback-only native server at a random port using Zonky Embedded Postgres. It needs no Docker or existing database service. Test-only native binaries are not included in the application JAR. The supplied binaries support x86-64 Windows/Linux; the native test server cannot run as root on Linux.
 
 On Windows, `initdb` needs an ASCII runtime path. By default, native test data and binaries live under the JVM temporary directory in `elibrary-postgres-tests`; data is retained after the server stops. If that parent path contains non-ASCII characters, pass `'-Delibrary.pg.test.root=D:/your-ascii-test-directory'` to Maven. This option does not change the source directory or system environment variables.
 
-The tests cover the full workflow, authentication, ownership, validation, paging, search escaping, error shape, database constraints, lock-timeout recovery, and old-return replay. Concurrent tests synchronize independent threads and call transactional services without an enclosing test transaction. They assert committed database state for one-license races, duplicate borrowing and simultaneous returns.
+The tests cover the workflow, authentication, ownership, validation, paging, keyword/facet/availability filters, sorting, error shape, constraints, lock-timeout recovery and old-return replay. They also verify private saved/history data, bookmark idempotence and concurrent saves. Concurrent tests call transactional services in independent threads without an enclosing test transaction and inspect committed state. Frontend request tests cover explicit credentials, safe error mapping and ambiguous writes without automatic resend.
 
 JUnit XML/text reports are under `target/surefire-reports` and `target/postgres-test-reports`. CI is configured for H2 on Linux/Windows and PostgreSQL on Linux. Repository configuration alone does not establish that hosted CI or a container deployment has run.
 
 ## Deliberate scope and next steps
 
-The five requested operations are implemented. Content-file distribution, a frontend, administration, reservations, due dates, renewal and fines are outside this version. Splitting this workflow into microservices or adding Redis/Kafka/gRPC would add operational and consistency costs without serving a current requirement.
+The five requested operations and their browser workflows are implemented. Content-file distribution, administration, reservations, due dates, renewal and fines are outside this version. Splitting this workflow into microservices or adding Redis/Kafka/gRPC would add operational and consistency costs without serving a current requirement.
+
+Categories, richer discovery, saved books and retained history are bounded additions to the requested workflow. They add useful reader behavior while preserving the original API defaults and transaction rules. A full-text reader/DRM system is not implied by the metadata and license model.
 
 Before expanding the system, prioritize identity lifecycle, real authorization and catalog administration, PostgreSQL operational hardening, a measured load test, database role separation, and deployment/back-up validation. Rate limiting, caching, asynchronous notifications and service extraction should follow measured needs. The current automated tests establish functional and database behavior; they are not a production availability or throughput benchmark.

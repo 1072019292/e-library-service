@@ -40,6 +40,7 @@ abstract class IntegrationSupport {
     // 刻意不在测试类上使用 @Transactional，服务调用必须真实提交，线程才能看见彼此的写入。
     @BeforeEach
     void resetFixtures() {
+        jdbc.update("delete from favorites");
         jdbc.update("delete from loans");
         jdbc.update("delete from books");
         jdbc.update("delete from app_users");

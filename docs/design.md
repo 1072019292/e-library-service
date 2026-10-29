@@ -8,6 +8,8 @@ The aggregate being protected is a book's allocation of concurrent reading licen
 erDiagram
     BOOK ||--o{ LOAN : licenses
     USER ||--o{ LOAN : borrows
+    BOOK ||--o{ FAVORITE : saved
+    USER ||--o{ FAVORITE : saves
     BOOK {
         bigint id PK
         string title
@@ -30,6 +32,8 @@ erDiagram
 ```
 
 An active loan has `returned_at IS NULL`. The schema enforces referential integrity and valid timestamps. Vendor-specific migrations enforce the uniqueness of an active reader/book pair while permitting multiple returned historical loans. The total allocation limit is enforced by the transactional service protocol.
+
+Catalog metadata includes a category, original editorial guidance, reading highlights and source references. `Favorite` stores a unique user/book relation independently of loans; removing a bookmark leaves every loan intact. Returned-loan queries retain the same loan identities and timestamps and are always scoped to the authenticated reader. The browser implements the required five tasks plus these bounded discovery and shelf additions inside the same JAR.
 
 ## Borrowing sequence
 

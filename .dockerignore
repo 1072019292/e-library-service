@@ -6,3 +6,4 @@ data
 *.log
 .env
 .env.*
+src/main/resources/static/assets/covers/*.jpg

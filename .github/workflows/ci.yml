@@ -31,6 +31,11 @@ jobs:
       - name: Verify
         shell: bash
         run: ./mvnw --batch-mode --no-transfer-progress ${{ matrix.arguments }} verify
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test frontend request behavior
+        run: node --test src/test/frontend/api.test.mjs
       - name: Preserve test reports
         if: always()
         uses: actions/upload-artifact@v4

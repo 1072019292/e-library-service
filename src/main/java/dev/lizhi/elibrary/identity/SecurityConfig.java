@@ -43,7 +43,7 @@ public class SecurityConfig {
                     "UNAUTHORIZED", "Valid HTTP Basic credentials are required.", request.getRequestURI()));
         };
         return http
-                // 仅有 JSON POST 和 PUT 修改状态；无 Cookie 会话、表单登录或跨域凭据访问。
+                // 前端使用显式 Authorization 与 credentials:omit；修改仍仅限 JSON POST 和 PUT。
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -52,12 +52,16 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/", "/index.html", "/assets/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/actuator/health", "/actuator/health/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/books", "/api/books/*").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().denyAll())
                 .httpBasic(basic -> basic.authenticationEntryPoint(unauthorized))
+                .headers(headers -> headers.contentSecurityPolicy(policy -> policy.policyDirectives(
+                        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://covers.openlibrary.org; "
+                        + "font-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; "
+                        + "frame-ancestors 'none'; object-src 'none'")))
                 .exceptionHandling(errors -> errors.authenticationEntryPoint(unauthorized)
                         .accessDeniedHandler((request, response, exception) -> {
                             response.setStatus(HttpStatus.FORBIDDEN.value());

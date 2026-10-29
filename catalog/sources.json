@@ -1,0 +1,128 @@
+{
+  "data-intensive": {
+    "source": "https://openlibrary.org/works/OL19293745W",
+    "coverSource": "https://covers.openlibrary.org/b/id/8434671-M.jpg?default=false"
+  },
+  "effective-java": {
+    "source": "https://openlibrary.org/works/OL6223299W",
+    "coverSource": "https://covers.openlibrary.org/b/id/1176573-M.jpg?default=false"
+  },
+  "domain-driven-design": {
+    "source": "https://openlibrary.org/works/OL4464385W",
+    "coverSource": "https://covers.openlibrary.org/b/id/5548424-M.jpg?default=false"
+  },
+  "refactoring": {
+    "source": "https://openlibrary.org/works/OL16551230W",
+    "coverSource": "https://covers.openlibrary.org/b/id/7087623-M.jpg?default=false"
+  },
+  "pragmatic-programmer": {
+    "source": "https://openlibrary.org/works/OL5748544W",
+    "coverSource": "https://covers.openlibrary.org/b/id/10143650-M.jpg?default=false"
+  },
+  "clean-code": {
+    "source": "https://openlibrary.org/works/OL17618370W",
+    "coverSource": "https://covers.openlibrary.org/b/id/8065615-M.jpg?default=false"
+  },
+  "clean-architecture": {
+    "source": "https://openlibrary.org/works/OL19809141W",
+    "coverSource": "https://covers.openlibrary.org/b/id/8605114-M.jpg?default=false"
+  },
+  "design-patterns": {
+    "source": "https://openlibrary.org/works/OL6030812W",
+    "coverSource": "https://covers.openlibrary.org/b/id/6601119-M.jpg?default=false"
+  },
+  "java-concurrency": {
+    "source": "https://openlibrary.org/works/OL16512736W",
+    "coverSource": "https://covers.openlibrary.org/b/id/7069893-M.jpg?default=false"
+  },
+  "java-performance": {
+    "source": "https://openlibrary.org/works/OL19547763W",
+    "coverSource": "https://covers.openlibrary.org/b/id/8514235-M.jpg?default=false"
+  },
+  "spring-in-action": {
+    "source": "https://openlibrary.org/works/OL8955978W",
+    "coverSource": "https://covers.openlibrary.org/b/id/8722096-M.jpg?default=false"
+  },
+  "spring-security": {
+    "source": "https://openlibrary.org/works/OL22166282W",
+    "coverSource": "https://covers.openlibrary.org/b/id/13276048-M.jpg?default=false"
+  },
+  "release-it": {
+    "source": "https://openlibrary.org/works/OL8848832W",
+    "coverSource": "https://covers.openlibrary.org/b/id/743624-M.jpg?default=false"
+  },
+  "building-microservices": {
+    "source": "https://openlibrary.org/works/OL19547194W",
+    "coverSource": "https://covers.openlibrary.org/b/id/8513315-M.jpg?default=false"
+  },
+  "monolith-microservices": {
+    "source": "https://openlibrary.org/works/OL21355484W",
+    "coverSource": "https://covers.openlibrary.org/b/id/12895074-M.jpg?default=false"
+  },
+  "fundamentals-architecture": {
+    "source": "https://openlibrary.org/works/OL20872782W",
+    "coverSource": "https://covers.openlibrary.org/b/id/10193363-M.jpg?default=false"
+  },
+  "architecture-hard-parts": {
+    "source": "https://openlibrary.org/works/OL25326737W",
+    "coverSource": "https://covers.openlibrary.org/b/id/12318698-M.jpg?default=false"
+  },
+  "database-internals": {
+    "source": "https://openlibrary.org/works/OL21360140W",
+    "coverSource": "https://covers.openlibrary.org/b/id/14572292-M.jpg?default=false"
+  },
+  "high-performance-mysql": {
+    "source": "https://openlibrary.org/works/OL15705149W",
+    "coverSource": "https://covers.openlibrary.org/b/id/5076309-M.jpg?default=false"
+  },
+  "redis-in-action": {
+    "source": "https://openlibrary.org/works/OL19548259W",
+    "coverSource": "https://covers.openlibrary.org/b/id/8514972-M.jpg?default=false"
+  },
+  "ml-systems": {
+    "source": "https://openlibrary.org/works/OL26768541W",
+    "coverSource": "https://covers.openlibrary.org/b/id/13314480-M.jpg?default=false"
+  },
+  "ai-engineering": {
+    "source": "https://openlibrary.org/works/OL39671094W",
+    "coverSource": "https://covers.openlibrary.org/b/id/15091156-M.jpg?default=false"
+  },
+  "hands-on-ml": {
+    "source": "https://openlibrary.org/works/OL20709638W",
+    "coverSource": "https://covers.openlibrary.org/b/id/9388208-M.jpg?default=false"
+  },
+  "deep-learning": {
+    "source": "https://openlibrary.org/works/OL17801809W",
+    "coverSource": "https://covers.openlibrary.org/b/id/8086288-M.jpg?default=false"
+  },
+  "nlp-transformers": {
+    "source": "https://openlibrary.org/works/OL25810304W",
+    "coverSource": "https://covers.openlibrary.org/b/id/14559602-M.jpg?default=false"
+  },
+  "grokking-algorithms": {
+    "source": "https://openlibrary.org/works/OL19546865W",
+    "coverSource": "https://covers.openlibrary.org/b/id/8512926-M.jpg?default=false"
+  },
+  "introduction-algorithms": {
+    "source": "https://openlibrary.org/works/OL4781294W",
+    "coverSource": "https://covers.openlibrary.org/b/id/2341462-M.jpg?default=false"
+  },
+  "computer-networking": {
+    "source": "https://openlibrary.org/works/OL29353889W"
+  },
+  "operating-systems": {
+    "source": "https://pages.cs.wisc.edu/~remzi/OSTEP/"
+  },
+  "computer-systems": {
+    "source": "https://openlibrary.org/works/OL19545341W",
+    "coverSource": "https://covers.openlibrary.org/b/id/8511531-M.jpg?default=false"
+  },
+  "fluent-python": {
+    "source": "https://openlibrary.org/works/OL19932156W",
+    "coverSource": "https://covers.openlibrary.org/b/id/8743408-M.jpg?default=false"
+  },
+  "python-crash-course": {
+    "source": "https://openlibrary.org/works/OL17920482W",
+    "coverSource": "https://covers.openlibrary.org/b/id/8245395-M.jpg?default=false"
+  }
+}

@@ -21,6 +21,18 @@ public class Book {
     private String description;
     @Column(nullable = false)
     private int totalLicenses;
+    @Column(nullable = false, length = 40)
+    private String category = "未分类";
+    @Column(nullable = false, length = 400)
+    private String audience = "";
+    @Column(nullable = false, length = 1600)
+    private String highlights = "";
+    @Column(length = 300)
+    private String coverUrl;
+    @Column(length = 500)
+    private String sourceUrl;
+    @Column(nullable = false)
+    private boolean featured;
 
     protected Book() { }
 
@@ -37,4 +49,10 @@ public class Book {
     public String getAuthor() { return author; }
     public String getDescription() { return description; }
     public int getTotalLicenses() { return totalLicenses; }
+    public String getCategory() { return category; }
+    public String getAudience() { return audience; }
+    public String getHighlights() { return highlights; }
+    public String getCoverUrl() { return coverUrl; }
+    public String getSourceUrl() { return sourceUrl; }
+    public boolean isFeatured() { return featured; }
 }

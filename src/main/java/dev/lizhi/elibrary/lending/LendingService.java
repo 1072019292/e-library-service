@@ -54,6 +54,11 @@ public class LendingService {
         return PageResponse.from(loans.findCurrent(userId, Pagination.request(page, size)).map(LoanView::from));
     }
 
+    @Transactional(readOnly = true)
+    public PageResponse<LoanView> returned(long userId, int page, int size) {
+        return PageResponse.from(loans.findReturned(userId, Pagination.request(page, size)).map(LoanView::from));
+    }
+
     private Book lockBook(long bookId) {
         return books.findForUpdate(bookId).orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND,
                 "BOOK_NOT_FOUND", "The book was not found."));

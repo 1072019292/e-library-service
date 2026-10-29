@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="阅间电子图书馆。发现书目、借阅好书，管理你的阅读书架。">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/assets/app.css">
+  <script type="module" src="/assets/app.js"></script>
+  <title>阅间 · 电子图书馆</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#catalog" aria-label="阅间，返回全部书籍">
+        <span class="brand-mark" aria-hidden="true"><svg><use href="/assets/icons.svg#book-open"></use></svg></span>
+        <span class="brand-type">阅间<span class="brand-english">E-LIBRARY</span></span>
+      </a>
+      <nav class="main-nav" aria-label="主要导航">
+        <a href="#catalog" id="catalog-nav" aria-current="page">发现书籍</a>
+        <a href="#loans" id="loans-nav">我的书架<span id="loan-count" class="nav-count" hidden></span></a>
+      </nav>
+      <div class="account-area">
+        <button class="button button-primary account-login" id="sign-in" type="button">登录阅间<svg aria-hidden="true"><use href="/assets/icons.svg#arrow-right"></use></svg></button>
+        <div class="signed-in" id="signed-in" hidden><span class="avatar" id="avatar" aria-hidden="true"></span><span id="reader-name"></span><button class="text-button" id="sign-out" type="button">退出</button></div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="main-shell" tabindex="-1">
+    <section id="catalog-view" aria-labelledby="catalog-title">
+      <div class="intro">
+        <div class="intro-copy"><h1 id="catalog-title"><span class="headline-line">下一本好书，</span><span class="headline-line">从这里开始。</span></h1><p>从 Java、数据系统到人工智能，<br>收藏想读的，借阅正在读的。</p><a class="button button-primary hero-action" href="#shelf">浏览完整书库<svg aria-hidden="true"><use href="/assets/icons.svg#arrow-right"></use></svg></a></div>
+        <aside id="featured-panel" class="featured-panel" aria-label="馆藏精选"><span class="featured-loading">正在挑选馆藏好书…</span></aside>
+      </div>
+      <div class="catalog-toolbar" id="shelf">
+        <div class="section-title"><h2 id="shelf-heading">全部书籍</h2><span id="catalog-count" class="result-count" aria-live="polite"></span></div>
+        <form class="search-form" id="search-form" role="search">
+          <svg aria-hidden="true"><use href="/assets/icons.svg#magnifying-glass"></use></svg>
+          <label class="sr-only" for="search">搜索书名、作者或主题</label><input id="search" type="search" maxlength="200" placeholder="搜索书名、作者或主题" autocomplete="off">
+          <button type="submit">搜索</button>
+        </form>
+      </div>
+      <div class="catalog-filters"><nav id="category-filters" class="category-filters" aria-label="按主题浏览"></nav><div class="filter-options"><label class="available-filter"><input type="checkbox" id="available-only">仅看可借</label><label class="sort-label" for="sort">排序<select id="sort" aria-label="书籍排序"><option value="catalog">书库顺序</option><option value="recent">最近入库</option><option value="title">书名 A-Z</option></select></label><button class="text-button" id="reset-filters" type="button" hidden>清除筛选</button></div></div>
+      <div id="catalog-feedback" class="feedback" role="status" hidden></div>
+      <div id="book-grid" class="book-grid" aria-live="polite" aria-busy="true"></div>
+      <div id="catalog-empty" class="empty-state" hidden><svg aria-hidden="true"><use href="/assets/icons.svg#book-open"></use></svg><h3>暂时没有找到对应的书籍</h3><p>换个关键词，或清除筛选重新发现好书。</p><button class="button button-secondary" id="clear-search" type="button">查看全部书籍</button></div>
+      <nav id="catalog-pagination" class="pagination" aria-label="书籍分页" hidden><button id="catalog-previous" class="button button-secondary" type="button">上一页</button><span id="catalog-page"></span><button id="catalog-next" class="button button-secondary" type="button">下一页</button></nav>
+      <div class="reading-note"><span class="note-rule" aria-hidden="true"></span><p>好书不必读完才记住，先收藏，再慢慢相遇。</p><button class="text-button" id="explore-loans" type="button">打开我的书架<svg aria-hidden="true"><use href="/assets/icons.svg#arrow-right"></use></svg></button></div>
+    </section>
+
+    <section id="loans-view" aria-labelledby="loans-title" hidden>
+      <div class="loans-intro"><div><h1 id="loans-title">我的书架</h1><p id="loans-subtitle">想读的、正在读的，以及每一次借还的记录。</p></div><a href="#catalog" class="button button-secondary">继续发现好书<svg aria-hidden="true"><use href="/assets/icons.svg#arrow-right"></use></svg></a></div>
+      <nav class="library-tabs" id="library-tabs" aria-label="书架内容" hidden><button type="button" id="tab-active" aria-pressed="true">当前借阅<span id="count-active"></span></button><button type="button" id="tab-returned" aria-pressed="false">借阅历史<span id="count-returned"></span></button><button type="button" id="tab-favorites" aria-pressed="false">收藏书架<span id="count-favorites"></span></button></nav>
+      <div id="loans-feedback" class="feedback" role="status" hidden></div>
+      <div id="loans-guest" class="empty-state" hidden><svg aria-hidden="true"><use href="/assets/icons.svg#user"></use></svg><h2>你的阅读书架，从这里开始</h2><p>登录后，可以在这里查看当前借阅的书籍并归还。</p><button id="loans-sign-in" class="button button-primary" type="button">登录阅间</button></div>
+      <div id="loans-empty" class="empty-state" hidden><svg aria-hidden="true"><use href="/assets/icons.svg#book-open"></use></svg><h2 id="library-empty-title">书架空着，可能性满满</h2><p id="library-empty-description">挑一本感兴趣的好书，你的借阅会出现在这里。</p><a href="#catalog" class="button button-primary">去发现好书</a></div>
+      <div id="loan-list" class="loan-list" aria-live="polite"></div>
+      <div id="favorite-grid" class="book-grid" aria-live="polite" hidden></div>
+      <nav id="loans-pagination" class="pagination" aria-label="借阅分页" hidden><button id="loans-previous" class="button button-secondary" type="button">上一页</button><span id="loans-page"></span><button id="loans-next" class="button button-secondary" type="button">下一页</button></nav>
+    </section>
+  </main>
+
+  <footer class="site-footer"><span>阅间 <span class="footer-english">E-LIBRARY</span></span><a href="https://openlibrary.org/" target="_blank" rel="noopener noreferrer">书目与封面参考 Open Library</a><span>留一点时间，读一本好书。</span></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <dialog id="login-dialog" class="login-dialog" aria-labelledby="login-title">
+    <button id="login-close" class="icon-button dialog-close" type="button" aria-label="关闭登录"><svg aria-hidden="true"><use href="/assets/icons.svg#x"></use></svg></button>
+    <div class="login-symbol" aria-hidden="true"><svg><use href="/assets/icons.svg#book-open"></use></svg></div>
+    <h2 id="login-title">欢迎来到阅间</h2><p class="dialog-description">登录后，借阅好书，照料自己的阅读书架。</p>
+    <form id="login-form" method="post" action="/api/me/loans">
+      <label for="username">账号</label><input id="username" name="username" autocomplete="username" maxlength="80" required placeholder="请输入账号">
+      <label for="password">密码</label><input id="password" name="password" type="password" autocomplete="current-password" maxlength="256" required placeholder="请输入密码">
+      <p id="login-error" class="form-error" role="alert" hidden></p><button id="login-submit" type="submit" class="button button-primary full-width">登录</button>
+    </form>
+    <div class="demo-accounts"><span>使用演示账号体验</span><div><button type="button" id="fill-alice">填入 Alice</button><button type="button" id="fill-bob">填入 Bob</button></div><p>凭据仅在当前页面使用，退出或刷新即清除。</p></div>
+  </dialog>
+
+  <dialog id="book-dialog" class="book-dialog" aria-labelledby="detail-title">
+    <button id="detail-close" class="icon-button dialog-close" type="button" aria-label="关闭书籍详情"><svg aria-hidden="true"><use href="/assets/icons.svg#x"></use></svg></button>
+    <div id="detail-content"></div>
+  </dialog>
+  <noscript><div class="noscript">请启用 JavaScript 以使用书库搜索、借阅与归还功能。公开书目也可通过 <a href="/api/books">书籍接口</a>查看。</div></noscript>
+</body>
+</html>
