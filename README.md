@@ -38,6 +38,10 @@ The default `demo` profile binds to `127.0.0.1:8080`. Open `http://127.0.0.1:808
 
 The HTML/CSS/JavaScript, font, licensed icons and original fallback cover compositions are included in the JAR. No Node.js runtime or separate frontend server is needed to use it. Optional publisher-cover images reference Open Library directly according to its usage guidance; failed or low-resolution scans retain the local fallback. All core tasks work without that image service. The interface supports desktop/mobile, system dark mode, keyboard focus and reduced motion. See `src/main/resources/static` and `DESIGN.md`.
 
+Maven excludes local reference JPEG scans during both resource copying and JAR
+creation, including stale scans left in `target` by an earlier local build.
+Git, the Docker context and the allowlisted Pages bundle exclude them as well.
+
 Browser credentials are held only in page memory, cleared on logout/refresh and sent through explicit Authorization headers with `credentials: omit`. A failed or timed-out write is not automatically repeated; the interface reconciles current loans and availability. Dynamic book and user text is inserted through DOM text nodes, and a Content Security Policy restricts assets and connections to the same origin.
 
 It creates a file database at `./data/elibrary.mv.db`, 32 real technical titles in six editorial categories, and two **public demonstration accounts**:

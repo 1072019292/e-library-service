@@ -31,6 +31,9 @@ jobs:
       - name: Verify
         shell: bash
         run: ./mvnw --batch-mode --no-transfer-progress ${{ matrix.arguments }} verify
+      - name: Verify reference scans are absent from the application JAR
+        run: >-
+          python -c "import zipfile; z=zipfile.ZipFile('target/e-library-service-1.0.0.jar'); assert not any(n.startswith('BOOT-INF/classes/static/assets/covers/') and n.lower().endswith('.jpg') for n in z.namelist()), 'Local reference scans must not be packaged'"
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
