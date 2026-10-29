@@ -24,6 +24,12 @@ import org.springframework.test.web.servlet.MvcResult;
 
 class LibraryApiTest extends IntegrationSupport {
     @Test
+    void rootProvidesAPublicBrowserEntryToTheCatalog() throws Exception {
+        mvc.perform(get("/")).andExpect(status().isFound())
+                .andExpect(header().string("Location", "/api/books"));
+    }
+
+    @Test
     void browseHasStablePaginationAndPublicDetails() throws Exception {
         mvc.perform(get("/api/books").param("size", "2"))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.items", hasSize(2)))

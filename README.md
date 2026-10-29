@@ -24,7 +24,9 @@ On Linux or macOS:
 java -jar target/e-library-service-1.0.0.jar
 ```
 
-The default `demo` profile binds to `127.0.0.1:8080`. It creates a file database at `./data/elibrary.mv.db`, five books, and two **public demonstration accounts**:
+The default `demo` profile binds to `127.0.0.1:8080`. Open `http://127.0.0.1:8080/` in a browser to reach the public book catalog JSON. This root entry redirects to `/api/books`; the Java process must remain running. Start the application again after a computer restart.
+
+It creates a file database at `./data/elibrary.mv.db`, five books, and two **public demonstration accounts**:
 
 | Username | Password |
 | --- | --- |

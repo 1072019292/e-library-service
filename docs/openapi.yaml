@@ -12,6 +12,17 @@ tags:
   - name: Lending
   - name: Operations
 paths:
+  /:
+    get:
+      operationId: serviceEntry
+      tags: [Operations]
+      summary: Redirect a browser to the public book catalog
+      responses:
+        '302':
+          description: Public catalog entry
+          headers:
+            Location:
+              schema: {type: string, example: /api/books}
   /api/books:
     get:
       operationId: browseBooks
